@@ -1,5 +1,8 @@
-const fs = require('fs');
-const { add, isMatchingIn, tokenize } = require('./helpers.js');
+const { add,
+  isMatchingIn,
+  tokenize,
+  getAnalyserData
+} = require('./helpers.js');
 
 const sentimentOf = (token, sentiments, moodKeywords) => {
   for (const mood in moodKeywords) {
@@ -37,12 +40,12 @@ const finalise = sentiments => {
   return formate(maxValueSentiment);
 };
 
-const DATAFILE = './analyserData.json';
+const DATAFILE = './data/analyserData.json';
 
 const main = function (sentence) {
   let analyserData = {};
   try {
-    analyserData = JSON.parse(fs.readFileSync(DATAFILE));
+    analyserData = getAnalyserData(DATAFILE);
   } catch (error) {
     return 'ERROR';
   }
@@ -52,3 +55,6 @@ const main = function (sentence) {
   }
   return finalise(analysedSentiments);
 };
+
+const [, , sentence] = process.argv;
+console.log(main(sentence));
